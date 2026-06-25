@@ -27,9 +27,9 @@ export default function Home() {
       <MetaBar />
       <Marquee />
       <CandidateSection />
+      <BeforeAfterGallery />
       <MistakesSection />
       <ConditionSection />
-      <BeforeAfterGallery />
       <DoctorSection />
       <BenefitsSection />
       <VideoTestimonialsSection />
