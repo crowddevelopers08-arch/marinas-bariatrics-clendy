@@ -1,6 +1,6 @@
 ﻿import AttentionBar from "@/components/bariatric/AttentionBar";
-import BeforeAfterSection from "@/components/bariatric/BeforeAfterSection";
 import BenefitsSection from "@/components/bariatric/BenefitsSection";
+import BeforeAfterGallery from "@/components/bariatric/BeforeAfterGallery";
 import { BookingModal } from "@/components/bariatric/BookingModal";
 import BookingSection from "@/components/bariatric/BookingSection";
 import CandidateSection from "@/components/bariatric/CandidateSection";
@@ -29,7 +29,7 @@ export default function Home() {
       <CandidateSection />
       <MistakesSection />
       <ConditionSection />
-      <BeforeAfterSection />
+      <BeforeAfterGallery />
       <DoctorSection />
       <BenefitsSection />
       <VideoTestimonialsSection />

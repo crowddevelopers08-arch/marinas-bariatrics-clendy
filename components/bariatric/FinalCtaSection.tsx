@@ -63,7 +63,7 @@ export default function FinalCtaSection() {
               One-time · In-clinic<br />Limited slots per week
             </div>
             <div className="w-full h-px bg-white/[0.08]" />
-            <BookButton className="w-full inline-flex items-center justify-center gap-2 font-bold text-[.95rem]  bg-[#126e6e] text-white px-6 py-[15px] max-sm:px-3 max-sm:py-3 rounded-full transition-all duration-200 hover:bg-white hover:-translate-y-[2px]">
+            <BookButton className="w-full inline-flex items-center justify-center gap-2 font-bold text-[.95rem]  bg-[#126e6e] text-white px-6 py-[15px] max-sm:px-3 max-sm:py-3 rounded-full transition-all duration-200 hover:bg-white hover:text-[#126e6e] hover:-translate-y-[2px]">
               Book My Consultation
             </BookButton>
             <p className="text-white/80 text-[.72rem]">Book Consultation · Paid at clinic</p>
