@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+model Submission {
+  id              Int      @id @default(autoincrement())
+  timestamp       String
+  source          String   @default("")
+  firstName       String
+  lastName        String   @default("")
+  email           String   @default("")
+  phone           String
+  location        String   @default("")
+  appointmentDate String   @default("")
+  appointmentTime String   @default("")
+  symptomType     String   @default("")
+  hadSurgery      String   @default("")
+  primaryGoal     String   @default("")
+  decisionMaker   String   @default("")
+  timeline        String   @default("")
+  prevConsult     String   @default("")
+  pageUrl         String   @default("")
+  telecrmStatus   String   @default("")
+  createdAt       DateTime @default(now())
+
+  @@map("submissions")
+}

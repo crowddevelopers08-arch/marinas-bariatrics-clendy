@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import * as fs from 'fs';
 import * as path from 'path';
+import { insertSubmission } from '@/lib/db';
 
 const DATA_DIR   = path.join(process.cwd(), 'data');
 const FILE_PATH  = path.join(DATA_DIR, 'submissions.csv');
@@ -270,6 +271,28 @@ export async function POST(req: NextRequest) {
 
     try { appendLocalRow(row); }
     catch (csvErr) { console.warn('Local CSV save skipped:', (csvErr as Error).message); }
+
+    try {
+      await insertSubmission({
+        timestamp,
+        source:          body.source,
+        firstName:       body.firstName,
+        lastName:        body.lastName,
+        email:           body.email,
+        phone:           body.phone,
+        location:        body.location,
+        appointmentDate: body.appointmentDate,
+        appointmentTime: body.appointmentTime,
+        symptomType:     body.symptomType,
+        hadSurgery:      body.hadSurgery,
+        primaryGoal:     body.primaryGoal,
+        decisionMaker:   body.decisionMaker,
+        timeline:        body.timeline,
+        prevConsult:     body.prevConsult,
+        pageUrl:         body.pageUrl,
+        telecrmStatus,
+      });
+    } catch (dbErr) { console.warn('DB save skipped:', (dbErr as Error).message); }
 
     try { recordBookedSlot(body.dateKey, body.appointmentTime); }
     catch (slotErr) { console.warn('Slot record skipped:', (slotErr as Error).message); }

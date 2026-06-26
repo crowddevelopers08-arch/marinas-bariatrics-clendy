@@ -1,0 +1,8 @@
+⨯ Another next dev server is already running.
+
+- Local:        http://localhost:3000
+- PID:          21652
+- Dir:          D:\CrowMedi\marina-bariatric-cldy
+- Log:          .next\dev\logs\next-development.log
+
+Run taskkill /PID 21652 /F to stop it.
