@@ -19,10 +19,10 @@ export default function TextTestimonialsSection() {
         {/* ── Heading ── */}
         <div className="text-center mb-10">
           <span className="inline-block text-[.68rem] font-bold tracking-[.18em] uppercase text-[#126e6e] px-[14px] py-[7px] border border-[rgba(66,200,200,.35)] rounded-full bg-[rgba(66,200,200,.10)] mb-5">
-            Patient Words
+            What Our Patients Say
           </span>
           <h2 className="text-[#163030] text-[clamp(1.6rem,3.4vw,2.5rem)] leading-[1.15] max-w-[24ch] mx-auto">
-            What Patients Say After Their Consultation
+           Real Experiences, Genuine Care, Lasting Results
           </h2>
         </div>
 
