@@ -7,6 +7,8 @@ const videos = [
   { src: "https://res.cloudinary.com/dthj7fakc/video/upload/v1781762970/video1_kaazse.mp4" },
   { src: "https://res.cloudinary.com/dthj7fakc/video/upload/v1781762972/video2_qtujea.mp4" },
   { src: "https://res.cloudinary.com/dthj7fakc/video/upload/v1781762972/video3_rpzmq3.mp4" },
+  { src: "https://ik.imagekit.io/tpucbav8z/marinias1_squished.mp4" },
+  { src: "https://ik.imagekit.io/tpucbav8z/output%201hernia_squished.mp4" },
 ];
 
 export default function VideoTestimonialsSection() {
@@ -111,7 +113,7 @@ export default function VideoTestimonialsSection() {
             className={`h-[7px] rounded-full transition-all duration-300 ${
               i === active
                 ? "w-7 bg-[#126e6e]"
-                : "w-[7px] "
+                : "w-[7px] bg-[rgba(22,48,48,0.18)]"
             }`}
           />
         ))}
