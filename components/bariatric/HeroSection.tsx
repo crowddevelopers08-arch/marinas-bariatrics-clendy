@@ -6,7 +6,7 @@ export default function HeroSection() {
       <div className="w-[min(1200px,92%)] mx-auto">
 
         {/* ── Hero card ── */}
-        <div className="relative bg-white rounded-[28px] overflow-hidden border border-[rgba(66,200,200,0.22)] grid grid-cols-[1fr_42%] max-[768px]:grid-cols-1">
+        <div className="relative bg-white rounded-[28px] overflow-hidden border border-[rgba(66,200,200,0.22)] grid grid-cols-[1fr_45%] max-[768px]:grid-cols-1">
 
           {/* Decorative ring — top right */}
           <div
@@ -51,7 +51,7 @@ export default function HeroSection() {
               style={{ background: "linear-gradient(to right, white, transparent)" }}
             />
             <video
-              src="https://res.cloudinary.com/dthj7fakc/video/upload/v1781762972/video2_qtujea.mp4"
+              src="https://ik.imagekit.io/tpucbav8z/marinias1_squished.mp4"
               controls
               playsInline
               preload="metadata"
