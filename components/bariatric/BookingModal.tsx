@@ -3,15 +3,66 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-const MONTHS    = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-const MONTHS_S  = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-const DAYS      = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
-const TIMES     = ["9:00 am","11:00 am","2:00 pm","3:30 pm","5:00 pm"];
-const DAY_NAMES = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-const DAY_S     = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-const END_TIME: Record<string,string> = {
-  "9:00 am":"9:30 am","11:00 am":"11:30 am",
-  "2:00 pm":"2:30 pm","3:30 pm":"4:00 pm","5:00 pm":"5:30 pm",
+const MONTHS = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+const MONTHS_S = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
+
+// Monday - Saturday only
+const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+const DAY_NAMES = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
+const DAY_S = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+// Available appointment slots: 4:30 PM - 7:00 PM
+// (Last appointment ends at 7:00 PM)
+const TIMES = [
+  "4:30 pm",
+  "5:00 pm",
+  "5:30 pm",
+  "6:00 pm",
+  "6:30 pm",
+];
+
+const END_TIME: Record<string, string> = {
+  "4:30 pm": "5:00 pm",
+  "5:00 pm": "5:30 pm",
+  "5:30 pm": "6:00 pm",
+  "6:00 pm": "6:30 pm",
+  "6:30 pm": "7:00 pm",
 };
 
 function firstWeekday(year: number, month: number) {
