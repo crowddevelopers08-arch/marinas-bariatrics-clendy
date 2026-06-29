@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SectionHeading } from "./Shared";
 
 const videos = [
@@ -13,14 +13,39 @@ const videos = [
 
 export default function VideoTestimonialsSection() {
   const [active, setActive] = useState(0);
+  const [isAutoPaused, setIsAutoPaused] = useState(false);
+  const prevVideoRef = useRef<HTMLVideoElement>(null);
+  const activeVideoRef = useRef<HTMLVideoElement>(null);
+  const nextVideoRef = useRef<HTMLVideoElement>(null);
   const n = videos.length;
-  const prev = () => setActive((i) => (i - 1 + n) % n);
-  const next = () => setActive((i) => (i + 1) % n);
+
+  const pauseAllVideos = (except?: HTMLVideoElement) => {
+    [prevVideoRef.current, activeVideoRef.current, nextVideoRef.current].forEach((video) => {
+      if (video && video !== except) video.pause();
+    });
+  };
+
+  const handleActivePlay = (video: HTMLVideoElement) => {
+    setIsAutoPaused(true);
+    pauseAllVideos(video);
+  };
+
+  const changeActive = (getNextIndex: (current: number) => number) => {
+    pauseAllVideos();
+    setActive(getNextIndex);
+  };
+
+  const prev = () => changeActive((i) => (i - 1 + n) % n);
+  const next = () => changeActive((i) => (i + 1) % n);
 
   useEffect(() => {
-    const t = setInterval(() => setActive((i) => (i + 1) % n), 10000);
+    if (isAutoPaused) return;
+    const t = setInterval(() => {
+      [prevVideoRef.current, activeVideoRef.current, nextVideoRef.current].forEach((video) => video?.pause());
+      setActive((i) => (i + 1) % n);
+    }, 10000);
     return () => clearInterval(t);
-  }, [n]);
+  }, [isAutoPaused, n]);
   const prevIdx = (active - 1 + n) % n;
   const nextIdx = (active + 1) % n;
 
@@ -55,9 +80,11 @@ export default function VideoTestimonialsSection() {
           >
             <div className="w-[210px] aspect-[9/16] rounded-[18px] bg-[#163030] overflow-hidden">
               <video
+                ref={prevVideoRef}
                 src={videos[prevIdx].src}
                 playsInline
                 preload="metadata"
+                onPlay={(event) => pauseAllVideos(event.currentTarget)}
                 className="w-full h-full object-cover pointer-events-none"
               />
             </div>
@@ -67,11 +94,13 @@ export default function VideoTestimonialsSection() {
           <div className="flex-none relative z-10">
             <div className="w-[300px] max-[640px]:w-[80vw] aspect-[9/16] rounded-[24px] overflow-hidden">
               <video
+                ref={activeVideoRef}
                 key={active}
                 src={videos[active].src}
                 controls
                 playsInline
                 preload="metadata"
+                onPlay={(event) => handleActivePlay(event.currentTarget)}
                 className="w-full h-full object-cover block"
               />
             </div>
@@ -84,9 +113,11 @@ export default function VideoTestimonialsSection() {
           >
             <div className="w-[210px] aspect-[9/16] rounded-[18px] overflow-hidden">
               <video
+                ref={nextVideoRef}
                 src={videos[nextIdx].src}
                 playsInline
                 preload="metadata"
+                onPlay={(event) => pauseAllVideos(event.currentTarget)}
                 className="w-full h-full object-cover pointer-events-none"
               />
             </div>
@@ -108,7 +139,7 @@ export default function VideoTestimonialsSection() {
         {videos.map((_, i) => (
           <button
             key={i}
-            onClick={() => setActive(i)}
+            onClick={() => changeActive(() => i)}
             aria-label={`Video ${i + 1}`}
             className={`h-[7px] rounded-full transition-all duration-300 ${
               i === active

@@ -14,6 +14,7 @@ import HeroSection from "@/components/bariatric/HeroSection";
 import Marquee from "@/components/bariatric/Marquee";
 import MetaBar from "@/components/bariatric/MetaBar";
 import MistakesSection from "@/components/bariatric/MistakesSection";
+import StatsSection from "@/components/bariatric/StatsSection";
 import TextTestimonialsSection from "@/components/bariatric/TextTestimonialsSection";
 import UrgencyBar from "@/components/bariatric/UrgencyBar";
 import VideoTestimonialsSection from "@/components/bariatric/VideoTestimonialsSection";
@@ -25,6 +26,7 @@ export default function Home() {
       <Header />
       <HeroSection />
       <MetaBar />
+      <StatsSection />
       <Marquee />
       <CandidateSection />
       <BeforeAfterGallery />

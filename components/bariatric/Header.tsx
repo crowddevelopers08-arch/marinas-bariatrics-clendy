@@ -18,7 +18,13 @@ export default function Header() {
         <span className="text-[#3d5656] text-[.85rem] tracking-[.04em] font-extrabold">
           Bariatric &amp; Metabolic Surgery
         </span>
-        <div className="max-[640px]:hidden">
+        <div className="flex items-center gap-3 max-[640px]:w-full max-[640px]:justify-center max-[640px]:gap-2 max-[640px]:[&_button]:px-[21px] max-[640px]:[&_button]:py-[12px]">
+          <a
+            href="tel:+919884000171"
+            className="inline-flex items-center gap-[10px] cursor-pointer font-bold text-[1rem] tracking-[.01em] text-[#126e6e] border border-transparent px-[30px] py-[16px] rounded-full transition-all duration-200 hover:bg-[#e3f9f9] hover:text-[#0d5252] hover:border-[rgba(18,110,110,.32)] hover:-translate-y-[2px] max-[640px]:px-[14px] max-[640px]:py-[12px] max-[640px]:text-[.86rem]"
+          >
+            +91 98840 00171
+          </a>
           <BookButton className={btnGhost}>Book Consultation</BookButton>
         </div>
       </div>
