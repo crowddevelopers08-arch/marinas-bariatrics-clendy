@@ -32,7 +32,7 @@ export default function DoctorSection() {
             </div>
 
             <p className="text-[#3d5656] mb-5 leading-relaxed">
-              Over [X] years, Dr. Preethi Mrinalini has helped patients struggling with obesity understand their medical options and achieve lasting results through advanced laparoscopic bariatric procedures with a focus on safety, metabolic outcomes, and long-term patient support.
+              Over 12 years, Dr. Preethi Mrinalini has helped patients struggling with obesity understand their medical options and achieve lasting results through advanced laparoscopic bariatric procedures with a focus on safety, metabolic outcomes, and long-term patient support.
             </p>
 
             {/* Mission quote */}
