@@ -149,6 +149,20 @@ export default function VideoTestimonialsSection() {
           />
         ))}
       </div>
+
+      <div className="w-[min(760px,92%)] mx-auto mt-7 pb-10 text-center">
+        <p className="text-[#3d5656] text-[clamp(.94rem,1.4vw,1.05rem)] leading-relaxed">
+          Want to watch the full patient stories and more doctor videos?
+        </p>
+        <a
+          href="https://www.instagram.com/dr.preethimrinalini?igsh=YWkzdmlsc3l0aWF5"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-3 inline-block text-[.96rem] font-bold text-[#126e6e] underline underline-offset-4 transition-colors duration-200 hover:text-[#0d5252]"
+        >
+          Watch full videos on Instagram
+        </a>
+      </div>
     </section>
   );
 }
