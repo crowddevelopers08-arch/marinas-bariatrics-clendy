@@ -88,7 +88,7 @@ export default function HeroSection() {
             <div className="col-start-2 row-start-1 row-span-2 p-6 flex items-center max-[768px]:px-5 max-[768px]:py-4">
               <div className="relative w-full rounded-2xl overflow-hidden aspect-video shadow-[0_8px_40px_rgba(18,110,110,0.13)] ring-1 ring-[rgba(66,200,200,0.18)]">
                 <video
-                  src="https://res.cloudinary.com/daclbrdse/video/upload/v1782806091/marinias1_squished_qt6lpm.mp4"
+                  src="https://res.cloudinary.com/daclbrdse/video/upload/v1782813489/VSL_out_1_final_squished_gibpjp.mp4"
                   controls
                   playsInline
                   preload="metadata"
