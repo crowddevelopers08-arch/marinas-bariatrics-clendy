@@ -28,9 +28,6 @@ type Submission = {
   appointmentTime: string
   symptomType:     string
   hadSurgery:      string
-  primaryGoal:     string
-  decisionMaker:   string
-  timeline:        string
   prevConsult:     string
   pageUrl:         string
   telecrmStatus:   string
@@ -54,9 +51,6 @@ const csvColumns: { key: keyof Submission; label: string }[] = [
   { key: 'appointmentTime', label: 'Appointment Time' },
   { key: 'symptomType', label: 'Symptom Type' },
   { key: 'hadSurgery', label: 'Surgery Advised' },
-  { key: 'primaryGoal', label: 'Primary Goal' },
-  { key: 'decisionMaker', label: 'Decision Maker' },
-  { key: 'timeline', label: 'Timeline' },
   { key: 'prevConsult', label: 'Previous Consult' },
   { key: 'pageUrl', label: 'Page URL' },
   { key: 'telecrmStatus', label: 'TeleCRM Status' },
@@ -536,9 +530,6 @@ export default function Dashboard() {
                                   <DetailField label="Appointment Time" value={s.appointmentTime} />
                                   <DetailField label="Symptom Type"     value={s.symptomType} />
                                   <DetailField label="Surgery Advised"  value={s.hadSurgery} />
-                                  <DetailField label="Primary Goal"     value={s.primaryGoal} />
-                                  <DetailField label="Decision Maker"   value={s.decisionMaker} />
-                                  <DetailField label="Timeline"         value={s.timeline} />
                                   <DetailField label="Prev. Consult"    value={s.prevConsult} />
                                   <DetailField label="TeleCRM"          value={s.telecrmStatus} />
                                   <DetailField label="Submitted At"     value={s.timestamp} />
@@ -606,11 +597,11 @@ export default function Dashboard() {
 
 function DetailField({ label, value }: { label: string; value: string }) {
   return (
-    <div>
+    <div style={{ minWidth: 0 }}>
       <p style={{ margin: '0 0 4px', fontSize: 10, fontWeight: 700, color: BRAND.sub, letterSpacing: '0.07em', textTransform: 'uppercase' }}>
         {label}
       </p>
-      <p style={{ margin: 0, fontSize: 13, color: BRAND.text }}>{value || '—'}</p>
+      <p style={{ margin: 0, fontSize: 13, color: BRAND.text, wordBreak: 'break-word', overflowWrap: 'anywhere' }}>{value || '—'}</p>
     </div>
   )
 }

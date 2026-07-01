@@ -18,21 +18,6 @@ const MONTHS = [
   "December",
 ];
 
-const MONTHS_S = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-
 // Monday - Saturday only
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -45,8 +30,6 @@ const DAY_NAMES = [
   "Saturday",
 ];
 
-const DAY_S = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
 // Available appointment slots: 4:30 PM - 7:00 PM
 // (Last appointment ends at 7:00 PM)
 const TIMES = [
@@ -56,14 +39,6 @@ const TIMES = [
   "6:00 pm",
   "6:30 pm",
 ];
-
-const END_TIME: Record<string, string> = {
-  "4:30 pm": "5:00 pm",
-  "5:00 pm": "5:30 pm",
-  "5:30 pm": "6:00 pm",
-  "6:00 pm": "6:30 pm",
-  "6:30 pm": "7:00 pm",
-};
 
 function firstWeekday(year: number, month: number) {
   const d = new Date(year, month, 1).getDay();
@@ -116,23 +91,19 @@ export function BookingModal() {
   const [day, setDay]               = useState<number | null>(null);
   const [time, setTime]             = useState<string | null>(null);
   const [pending, setPending]       = useState<string | null>(null);
-  const [step, setStep]             = useState<Step>("calendar");
+  const [step, setStep]             = useState<Step>("form");
   const [bookedSlots, setBooked]    = useState<string[]>([]);
   const [slotsLoading, setSlotsLoading] = useState(false);
 
   const [form, setForm] = useState({ firstName:"", lastName:"", email:"", phone:"", location:"" });
   const [symptomType, setSymptomType] = useState("");
   const [hadSurgery,  setHadSurgery]  = useState("");
-  const [primaryGoal, setPrimaryGoal] = useState("");
-  const [decisionMaker, setDecision]  = useState("");
-  const [timeline,    setTimeline]    = useState("");
   const [prevConsult, setPrevConsult] = useState("");
 
   function resetAll() {
-    setDay(null); setTime(null); setPending(null); setStep("calendar");
+    setDay(null); setTime(null); setPending(null); setStep("form");
     setForm({ firstName:"", lastName:"", email:"", phone:"", location:"" });
-    setSymptomType(""); setHadSurgery(""); setPrimaryGoal("");
-    setDecision(""); setTimeline(""); setPrevConsult("");
+    setSymptomType(""); setHadSurgery(""); setPrevConsult("");
     setBooked([]); setSlotsLoading(false);
   }
 
@@ -161,10 +132,9 @@ export function BookingModal() {
 
   useEffect(() => {
     function handleOpen() {
-      setDay(null); setTime(null); setPending(null); setStep("calendar");
+      setDay(null); setTime(null); setPending(null); setStep("form");
       setForm({ firstName:"", lastName:"", email:"", phone:"", location:"" });
-      setSymptomType(""); setHadSurgery(""); setPrimaryGoal("");
-      setDecision(""); setTimeline(""); setPrevConsult("");
+      setSymptomType(""); setHadSurgery(""); setPrevConsult("");
       setBooked([]); setSlotsLoading(false);
       setOpen(true);
     }
@@ -206,9 +176,39 @@ export function BookingModal() {
 
   const selDateObj = day ? new Date(year, month, day) : null;
   const selDayName = selDateObj ? DAY_NAMES[selDateObj.getDay()] : "";
-  const selDayS    = selDateObj ? DAY_S[selDateObj.getDay()] : "";
   const blanks     = firstWeekday(year, month);
   const total      = daysInMonth(year, month);
+
+  async function submitBooking(selectedTime: string) {
+    setSubmitting(true);
+    setSubmitError("");
+    try {
+      const res = await fetch("/api/submissions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          source:          "Bariatric-cdy-Booking",
+          firstName:       form.firstName,
+          lastName:        form.lastName,
+          email:           form.email,
+          phone:           form.phone,
+          location:        form.location,
+          dateKey:         `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`,
+          appointmentDate: `${selDayName}, ${MONTHS[month]} ${day}, ${year}`,
+          appointmentTime: selectedTime,
+          symptomType,
+          hadSurgery,
+          prevConsult,
+          pageUrl:         window.location.href,
+        }),
+      });
+      if (!res.ok) throw new Error("Submission failed");
+      router.push("/thank-you");
+    } catch {
+      setSubmitError("Something went wrong. Please try again.");
+      setSubmitting(false);
+    }
+  }
 
   if (!open) return null;
 
@@ -244,6 +244,12 @@ export function BookingModal() {
 
             {/* Left — calendar */}
             <div className="flex flex-1 flex-col px-8 py-7 max-[620px]:px-4 max-[620px]:py-5">
+
+              <button onClick={() => { setStep("form"); setPending(null); }}
+                className="mb-5 flex w-fit cursor-pointer items-center gap-1.5 text-[12.5px] font-semibold text-[#5a8080] transition hover:text-[#126e6e]">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+                Back to your details
+              </button>
 
               {/* Month navigation */}
               <div className="mb-6 flex items-center justify-between">
@@ -346,13 +352,13 @@ export function BookingModal() {
                           </button>
                           {isPending && (
                             <div className="mt-2 grid grid-cols-2 gap-2">
-                              <button onClick={() => setPending(null)}
-                                className="cursor-pointer rounded-xl bg-[#eef9f9] py-2 text-[12px] font-semibold text-[#3d5656] transition hover:bg-[#d4f0f0]">
+                              <button onClick={() => setPending(null)} disabled={submitting}
+                                className="cursor-pointer rounded-xl bg-[#eef9f9] py-2 text-[12px] font-semibold text-[#3d5656] transition hover:bg-[#d4f0f0] disabled:cursor-not-allowed disabled:opacity-60">
                                 Cancel
                               </button>
-                              <button onClick={() => { setTime(t); setPending(null); setStep("form"); }}
-                                className="cursor-pointer rounded-xl bg-[#126e6e] py-2 text-[12px] font-bold text-white transition hover:bg-[#0d5252]">
-                                Confirm
+                              <button onClick={() => { setTime(t); submitBooking(t); }} disabled={submitting}
+                                className="cursor-pointer rounded-xl bg-[#126e6e] py-2 text-[12px] font-bold text-white transition hover:bg-[#0d5252] disabled:cursor-not-allowed disabled:opacity-60">
+                                {submitting ? "Booking…" : "Confirm"}
                               </button>
                             </div>
                           )}
@@ -360,6 +366,9 @@ export function BookingModal() {
                       );
                     })}
                   </div>
+                  {submitError && (
+                    <p className="mt-3 rounded-xl bg-red-50 px-4 py-3 text-[13px] font-medium text-red-600">{submitError}</p>
+                  )}
                 </>
               )}
             </div>
@@ -370,27 +379,8 @@ export function BookingModal() {
         {(step === "form" || step === "success") && (
           <div className="flex flex-1 overflow-hidden bg-white max-[620px]:flex-col max-[620px]:overflow-y-auto">
 
-            {/* Mobile top bar */}
-            <div className="hidden max-[620px]:flex max-[620px]:flex-none max-[620px]:items-center max-[620px]:justify-between max-[620px]:px-4 max-[620px]:py-3">
-              <button onClick={() => { setStep("calendar"); setTime(null); }}
-                className="flex cursor-pointer items-center gap-1.5 text-[13px] font-semibold text-[#3d5656]">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M15 18l-6-6 6-6"/></svg>
-                Back
-              </button>
-              <div className="text-right">
-                <p className="text-[12px] font-bold text-[#126e6e]">{time} – {END_TIME[time!]}</p>
-                <p className="text-[11px] text-[#7a9898]">{selDayS}, {MONTHS_S[month]} {day}</p>
-              </div>
-            </div>
-
             {/* Desktop left info panel */}
             <div className="flex w-[300px] flex-none flex-col bg-[#f5fcfc] px-8 py-8 max-[620px]:hidden">
-              <button onClick={() => { setStep("calendar"); setTime(null); }}
-                className="mb-6 flex cursor-pointer items-center gap-1.5 text-[12.5px] font-semibold text-[#5a8080] transition hover:text-[#126e6e]">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M15 18l-6-6 6-6"/></svg>
-                Back to calendar
-              </button>
-
               <img
                 src="https://res.cloudinary.com/dthj7fakc/image/upload/v1781681953/Marina-logo_v7lcbn.png"
                 alt="Marina's"
@@ -403,19 +393,11 @@ export function BookingModal() {
                 <span className="text-[14px] font-medium text-[#5a8080]">with Dr. Preethi Mrinalini</span>
               </p>
 
-              {/* Appointment summary card */}
               <div className="rounded-xl bg-white p-4 border border-[rgba(18,110,110,0.10)]">
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center gap-2.5 text-[13px] text-[#3d5656]">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#42c8c8" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
                     <span>30 min consultation</span>
-                  </div>
-                  <div className="flex items-start gap-2.5">
-                    <svg className="mt-0.5 flex-none" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#42c8c8" strokeWidth="2" strokeLinecap="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-                    <div>
-                      <p className="text-[13px] font-semibold text-[#163030]">{time} – {END_TIME[time!]}</p>
-                      <p className="text-[12px] text-[#7a9898]">{selDayName}, {MONTHS[month]} {day}, {year}</p>
-                    </div>
                   </div>
                   <div className="flex items-center gap-2.5 text-[13px] text-[#3d5656]">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#42c8c8" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
@@ -425,7 +407,7 @@ export function BookingModal() {
               </div>
 
               <p className="mt-5 text-[12px] leading-relaxed text-[#9ab8b8]">
-                We&apos;ll review your Bariatric symptoms, go through your reports, and walk you through your treatment options.
+                We&apos;ll review your Bariatric symptoms, go through your reports, and walk you through your treatment options. You&apos;ll pick a time that works for you next.
               </p>
             </div>
 
@@ -440,41 +422,11 @@ export function BookingModal() {
                     className="mb-4 hidden h-12 w-auto object-contain object-left max-[620px]:block"
                   />
                   <p className="mb-1 text-[22px] font-bold text-[#163030] max-[620px]:text-[18px]">Your Details</p>
-                  <p className="mb-6 text-[13px] text-[#7a9898] max-[620px]:mb-4">Fill in your info to confirm the slot.</p>
+                  <p className="mb-6 text-[13px] text-[#7a9898] max-[620px]:mb-4">Fill in your info, then pick a time that works for you.</p>
 
-                  <form className="flex flex-col gap-4 pb-4" onSubmit={async (e) => {
+                  <form className="flex flex-col gap-4 pb-4" onSubmit={(e) => {
                       e.preventDefault();
-                      setSubmitting(true);
-                      setSubmitError("");
-                      try {
-                        const res = await fetch("/api/submissions", {
-                          method: "POST",
-                          headers: { "Content-Type": "application/json" },
-                          body: JSON.stringify({
-                            source:          "Bariatric-cdy-Booking",
-                            firstName:       form.firstName,
-                            lastName:        form.lastName,
-                            email:           form.email,
-                            phone:           form.phone,
-                            location:        form.location,
-                            dateKey:         `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`,
-                            appointmentDate: `${selDayName}, ${MONTHS[month]} ${day}, ${year}`,
-                            appointmentTime: time,
-                            symptomType,
-                            hadSurgery,
-                            primaryGoal,
-                            decisionMaker,
-                            timeline,
-                            prevConsult,
-                            pageUrl:         window.location.href,
-                          }),
-                        });
-                        if (!res.ok) throw new Error("Submission failed");
-                        router.push("/thank-you");
-                      } catch {
-                        setSubmitError("Something went wrong. Please try again.");
-                        setSubmitting(false);
-                      }
+                      setStep("calendar");
                     }}>
 
                     <div className="grid grid-cols-2 gap-3 max-[620px]:grid-cols-1">
@@ -532,21 +484,6 @@ export function BookingModal() {
                       options={["Yes — I want a second opinion","No — this is my first consultation","Currently evaluating options"]}
                     />
                     <RadioGroup
-                      label="What is your primary goal with this consultation?"
-                      required value={primaryGoal} onChange={setPrimaryGoal}
-                      options={["Understand my condition clearly","Get a second opinion","Explore non-surgical treatment","Understand surgery risks and recovery"]}
-                    />
-                    <RadioGroup
-                      label="Are you the decision-maker for treatment?"
-                      required value={decisionMaker} onChange={setDecision}
-                      options={["Yes","No","Need to discuss with family"]}
-                    />
-                    <RadioGroup
-                      label="How soon are you planning to start treatment?"
-                      required value={timeline} onChange={setTimeline}
-                      options={["As soon as possible","Within 1 month","Within 3 months","Just exploring for now"]}
-                    />
-                    <RadioGroup
                       label="Have you consulted another doctor for this before?"
                       required value={prevConsult} onChange={setPrevConsult}
                       options={["Yes — looking for specialist opinion","No — this is my first consultation","Yes — but reports were inconclusive"]}
@@ -560,13 +497,9 @@ export function BookingModal() {
                       <span className="font-semibold text-[#126e6e]">Privacy Notice.</span>
                     </p>
 
-                    {submitError && (
-                      <p className="rounded-xl bg-red-50 px-4 py-3 text-[13px] font-medium text-red-600">{submitError}</p>
-                    )}
-
-                    <button type="submit" disabled={submitting}
-                      className="w-full rounded-xl bg-[#126e6e] py-3.5 text-[15px] font-bold text-white transition hover:bg-[#0d5252] disabled:cursor-not-allowed disabled:opacity-60 max-[620px]:py-3">
-                      {submitting ? "Submitting…" : "Confirm Appointment →"}
+                    <button type="submit"
+                      className="w-full rounded-xl bg-[#126e6e] py-3.5 text-[15px] font-bold text-white transition hover:bg-[#0d5252] max-[620px]:py-3">
+                      Continue to pick a time →
                     </button>
                   </form>
                 </>

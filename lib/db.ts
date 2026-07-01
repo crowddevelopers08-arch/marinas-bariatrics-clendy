@@ -19,22 +19,21 @@ export async function ensureTable() {
       "appointmentTime" TEXT  NOT NULL DEFAULT '',
       "symptomType"   TEXT    NOT NULL DEFAULT '',
       "hadSurgery"    TEXT    NOT NULL DEFAULT '',
-      "primaryGoal"   TEXT    NOT NULL DEFAULT '',
-      "decisionMaker" TEXT    NOT NULL DEFAULT '',
-      timeline        TEXT    NOT NULL DEFAULT '',
       "prevConsult"   TEXT    NOT NULL DEFAULT '',
       "pageUrl"       TEXT    NOT NULL DEFAULT '',
       "telecrmStatus" TEXT    NOT NULL DEFAULT '',
       "createdAt"     TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `
+  await sql`ALTER TABLE submissions DROP COLUMN IF EXISTS "primaryGoal"`
+  await sql`ALTER TABLE submissions DROP COLUMN IF EXISTS "decisionMaker"`
+  await sql`ALTER TABLE submissions DROP COLUMN IF EXISTS "timeline"`
 }
 
 export async function insertSubmission(data: {
   timestamp: string; source: string; firstName: string; lastName: string
   email: string; phone: string; location: string; appointmentDate: string
   appointmentTime: string; symptomType: string; hadSurgery: string
-  primaryGoal: string; decisionMaker: string; timeline: string
   prevConsult: string; pageUrl: string; telecrmStatus: string
 }) {
   await ensureTable()
@@ -42,13 +41,12 @@ export async function insertSubmission(data: {
     INSERT INTO submissions (
       timestamp, source, "firstName", "lastName", email, phone, location,
       "appointmentDate", "appointmentTime", "symptomType", "hadSurgery",
-      "primaryGoal", "decisionMaker", timeline, "prevConsult", "pageUrl", "telecrmStatus"
+      "prevConsult", "pageUrl", "telecrmStatus"
     ) VALUES (
       ${data.timestamp}, ${data.source}, ${data.firstName}, ${data.lastName},
       ${data.email}, ${data.phone}, ${data.location},
       ${data.appointmentDate}, ${data.appointmentTime}, ${data.symptomType}, ${data.hadSurgery},
-      ${data.primaryGoal}, ${data.decisionMaker}, ${data.timeline}, ${data.prevConsult},
-      ${data.pageUrl}, ${data.telecrmStatus}
+      ${data.prevConsult}, ${data.pageUrl}, ${data.telecrmStatus}
     )
   `
 }

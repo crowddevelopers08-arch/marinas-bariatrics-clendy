@@ -11,8 +11,8 @@ const HEADERS = [
   'Timestamp', 'Source',
   'First Name', 'Last Name', 'Email', 'Phone', 'Location',
   'Appointment Date', 'Appointment Time',
-  'Symptom Type', 'Surgery Advised', 'Primary Goal',
-  'Decision Maker', 'Timeline', 'Previous Consult',
+  'Symptom Type', 'Surgery Advised',
+  'Previous Consult',
   'Page URL', 'TeleCRM',
 ];
 
@@ -30,9 +30,6 @@ type SubmissionBody = {
   appointmentTime: string;
   symptomType: string;
   hadSurgery: string;
-  primaryGoal: string;
-  decisionMaker: string;
-  timeline: string;
   prevConsult: string;
   pageUrl: string;
 };
@@ -61,9 +58,6 @@ function normalizeSubmission(body: Record<string, unknown>): SubmissionBody {
     appointmentTime: toText(body.appointmentTime),
     symptomType:     toText(body.symptomType),
     hadSurgery:      toText(body.hadSurgery),
-    primaryGoal:     toText(body.primaryGoal),
-    decisionMaker:   toText(body.decisionMaker),
-    timeline:        toText(body.timeline),
     prevConsult:     toText(body.prevConsult),
     pageUrl:         toText(body.pageUrl),
   };
@@ -115,9 +109,6 @@ function buildRow(body: SubmissionBody, timestamp: string, telecrmStatus: string
     body.appointmentTime,
     body.symptomType,
     body.hadSurgery,
-    body.primaryGoal,
-    body.decisionMaker,
-    body.timeline,
     body.prevConsult,
     body.pageUrl,
     telecrmStatus,
@@ -147,9 +138,6 @@ async function pushToGAS(body: SubmissionBody, timestamp: string, telecrmStatus:
       appointmentTime: body.appointmentTime,
       symptomType:     body.symptomType,
       hadSurgery:      body.hadSurgery,
-      primaryGoal:     body.primaryGoal,
-      decisionMaker:   body.decisionMaker,
-      timeline:        body.timeline,
       prevConsult:     body.prevConsult,
       pageUrl:         body.pageUrl,
       telecrm:         telecrmStatus,
@@ -195,9 +183,6 @@ async function pushToTeleCRM(body: SubmissionBody): Promise<TelecrmResponse | nu
     `Slot: ${body.appointmentDate} at ${body.appointmentTime}`,
     `Symptom: ${body.symptomType}`,
     `Surgery advised: ${body.hadSurgery}`,
-    `Goal: ${body.primaryGoal}`,
-    `Decision maker: ${body.decisionMaker}`,
-    `Timeline: ${body.timeline}`,
     `Prev consult: ${body.prevConsult}`,
     `URL: ${body.pageUrl}`,
   ].join(' | ');
@@ -285,9 +270,6 @@ export async function POST(req: NextRequest) {
         appointmentTime: body.appointmentTime,
         symptomType:     body.symptomType,
         hadSurgery:      body.hadSurgery,
-        primaryGoal:     body.primaryGoal,
-        decisionMaker:   body.decisionMaker,
-        timeline:        body.timeline,
         prevConsult:     body.prevConsult,
         pageUrl:         body.pageUrl,
         telecrmStatus,

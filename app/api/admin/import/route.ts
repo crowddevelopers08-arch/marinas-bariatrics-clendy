@@ -72,9 +72,6 @@ export async function POST() {
         "appointmentTime" TEXT NOT NULL DEFAULT '',
         "symptomType"   TEXT NOT NULL DEFAULT '',
         "hadSurgery"    TEXT NOT NULL DEFAULT '',
-        "primaryGoal"   TEXT NOT NULL DEFAULT '',
-        "decisionMaker" TEXT NOT NULL DEFAULT '',
-        timeline        TEXT NOT NULL DEFAULT '',
         "prevConsult"   TEXT NOT NULL DEFAULT '',
         "pageUrl"       TEXT NOT NULL DEFAULT '',
         "telecrmStatus" TEXT NOT NULL DEFAULT '',
@@ -95,7 +92,7 @@ export async function POST() {
           INSERT INTO submissions (
             timestamp, source, "firstName", "lastName", email, phone, location,
             "appointmentDate", "appointmentTime", "symptomType", "hadSurgery",
-            "primaryGoal", "decisionMaker", timeline, "prevConsult", "pageUrl", "telecrmStatus"
+            "prevConsult", "pageUrl", "telecrmStatus"
           ) VALUES (
             ${ts},
             ${row['Source']             ?? ''},
@@ -108,9 +105,6 @@ export async function POST() {
             ${row['Appointment Time']   ?? ''},
             ${row['Symptom Type']       ?? ''},
             ${row['Surgery Advised']    ?? ''},
-            ${row['Primary Goal']       ?? ''},
-            ${row['Decision Maker']     ?? ''},
-            ${row['Timeline']           ?? ''},
             ${row['Previous Consult']   ?? ''},
             ${row['Page URL']           ?? ''},
             ${row['TeleCRM']            ?? ''}
