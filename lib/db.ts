@@ -62,15 +62,15 @@ export async function getSubmissions(
   /* ── today + search ── */
   if (filter === 'today' && search) {
     const q = `%${search}%`
-    const rows  = await sql`SELECT * FROM submissions WHERE "createdAt"::date = CURRENT_DATE AND ("firstName" ILIKE ${q} OR "lastName" ILIKE ${q} OR email ILIKE ${q} OR phone ILIKE ${q} OR location ILIKE ${q} OR "pageUrl" ILIKE ${q} OR "symptomType" ILIKE ${q}) ORDER BY "createdAt" DESC LIMIT ${pageSize} OFFSET ${offset}`
-    const [cnt] = await sql`SELECT COUNT(*)::int AS total FROM submissions WHERE "createdAt"::date = CURRENT_DATE AND ("firstName" ILIKE ${q} OR "lastName" ILIKE ${q} OR email ILIKE ${q} OR phone ILIKE ${q} OR location ILIKE ${q} OR "pageUrl" ILIKE ${q} OR "symptomType" ILIKE ${q})`
+    const rows  = await sql`SELECT * FROM submissions WHERE ("createdAt" AT TIME ZONE 'Asia/Kolkata')::date = (NOW() AT TIME ZONE 'Asia/Kolkata')::date AND ("firstName" ILIKE ${q} OR "lastName" ILIKE ${q} OR email ILIKE ${q} OR phone ILIKE ${q} OR location ILIKE ${q} OR "pageUrl" ILIKE ${q} OR "symptomType" ILIKE ${q}) ORDER BY "createdAt" DESC LIMIT ${pageSize} OFFSET ${offset}`
+    const [cnt] = await sql`SELECT COUNT(*)::int AS total FROM submissions WHERE ("createdAt" AT TIME ZONE 'Asia/Kolkata')::date = (NOW() AT TIME ZONE 'Asia/Kolkata')::date AND ("firstName" ILIKE ${q} OR "lastName" ILIKE ${q} OR email ILIKE ${q} OR phone ILIKE ${q} OR location ILIKE ${q} OR "pageUrl" ILIKE ${q} OR "symptomType" ILIKE ${q})`
     return { rows, total: (cnt as CountRow).total }
   }
 
   /* ── today only ── */
   if (filter === 'today') {
-    const rows  = await sql`SELECT * FROM submissions WHERE "createdAt"::date = CURRENT_DATE ORDER BY "createdAt" DESC LIMIT ${pageSize} OFFSET ${offset}`
-    const [cnt] = await sql`SELECT COUNT(*)::int AS total FROM submissions WHERE "createdAt"::date = CURRENT_DATE`
+    const rows  = await sql`SELECT * FROM submissions WHERE ("createdAt" AT TIME ZONE 'Asia/Kolkata')::date = (NOW() AT TIME ZONE 'Asia/Kolkata')::date ORDER BY "createdAt" DESC LIMIT ${pageSize} OFFSET ${offset}`
+    const [cnt] = await sql`SELECT COUNT(*)::int AS total FROM submissions WHERE ("createdAt" AT TIME ZONE 'Asia/Kolkata')::date = (NOW() AT TIME ZONE 'Asia/Kolkata')::date`
     return { rows, total: (cnt as CountRow).total }
   }
 
@@ -108,7 +108,7 @@ export async function getStats() {
   const rows = await sql`
     SELECT
       COUNT(*)::int                                                        AS total,
-      COUNT(*) FILTER (WHERE "createdAt"::date = CURRENT_DATE)::int       AS today,
+      COUNT(*) FILTER (WHERE ("createdAt" AT TIME ZONE 'Asia/Kolkata')::date = (NOW() AT TIME ZONE 'Asia/Kolkata')::date)::int AS today,
       COUNT(*) FILTER (WHERE "createdAt" >= NOW() - INTERVAL '7 days')::int AS week,
       COUNT(*) FILTER (WHERE "telecrmStatus" ILIKE 'Synced%')::int        AS synced
     FROM submissions

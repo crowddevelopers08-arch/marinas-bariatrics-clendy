@@ -8,6 +8,23 @@ const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfa
 export const metadata: Metadata = {
   title: "Bariatric Surgery Consultation - Marina's Clinic",
   description: "Permanent, medically proven weight loss solutions. Book a bariatric and metabolic surgery consultation at Marina's Clinic.",
+  icons: {
+    icon: [
+      {
+        url: "https://res.cloudinary.com/dthj7fakc/image/upload/v1781681953/Marina-logo_v7lcbn.png",
+        sizes: "32x32",
+        type: "image/png",
+      },
+      {
+        url: "https://res.cloudinary.com/dthj7fakc/image/upload/v1781681953/Marina-logo_v7lcbn.png",
+        sizes: "192x192",
+        type: "image/png",
+      },
+    ],
+    apple:
+      "https://res.cloudinary.com/dthj7fakc/image/upload/v1781681953/Marina-logo_v7lcbn.png",
+  },
+
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

@@ -18,10 +18,11 @@ const MONTHS = [
   "December",
 ];
 
-// Monday - Saturday only
-const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+// Monday - Saturday slots; Sunday remains visible but disabled in the grid.
+const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 const DAY_NAMES = [
+  "Sunday",
   "Monday",
   "Tuesday",
   "Wednesday",
