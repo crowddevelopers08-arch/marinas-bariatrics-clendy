@@ -52,7 +52,7 @@ export default function VideoTestimonialsSection() {
   return (
     <section className="bg-[#f4fefe] overflow-hidden">
       <div className="w-[min(1080px,92%)] mx-auto text-center">
-        <SectionHeading eyebrow="What Doctor Say" title="Stories From Those Who Chose Change" center />
+        <SectionHeading eyebrow="What Doctor Say" title="Quick videos. Clear answers. Better decisions." center />
       </div>
 
       {/* ── Carousel stage ── */}
