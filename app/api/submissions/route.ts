@@ -177,19 +177,45 @@ async function pushToTeleCRM(body: SubmissionBody): Promise<TelecrmResponse | nu
 
   const fullName = `${body.firstName} ${body.lastName}`.trim();
   const note     = [
-    `Source: ${body.source}`,
+    `Name: ${fullName}`,
     `Email: ${body.email}`,
+    `Phone Number: ${phone}`,
     `Location: ${body.location}`,
     `Slot: ${body.appointmentDate} at ${body.appointmentTime}`,
     `Symptom: ${body.symptomType}`,
     `Surgery advised: ${body.hadSurgery}`,
     `Prev consult: ${body.prevConsult}`,
+    `Source: ${body.source}`,
     `URL: ${body.pageUrl}`,
-  ].join(' | ');
+  ].join('\n');
 
   const payload = {
-    fields: { phone, name: fullName },
-    actions: [{ type: 'SYSTEM_NOTE', text: note }],
+    fields: {
+      phone,
+      name:            fullName,
+      email:           body.email,
+      location:        body.location,
+      appointmentDate: body.appointmentDate,
+      appointmentTime: body.appointmentTime,
+      symptomType:     body.symptomType,
+      surgeryAdvised:  body.hadSurgery,
+      prevConsult:     body.prevConsult,
+      source:          body.source,
+      pageUrl:         body.pageUrl,
+    },
+    actions: [
+      { type: 'SYSTEM_NOTE', text: note },
+      { type: 'SYSTEM_NOTE', text: `Name: ${fullName}` },
+      { type: 'SYSTEM_NOTE', text: `Email: ${body.email}` },
+      { type: 'SYSTEM_NOTE', text: `Phone Number: ${phone}` },
+      { type: 'SYSTEM_NOTE', text: `Location: ${body.location}` },
+      { type: 'SYSTEM_NOTE', text: `Slot: ${body.appointmentDate} at ${body.appointmentTime}` },
+      { type: 'SYSTEM_NOTE', text: `Symptom: ${body.symptomType}` },
+      { type: 'SYSTEM_NOTE', text: `Surgery advised: ${body.hadSurgery}` },
+      { type: 'SYSTEM_NOTE', text: `Prev consult: ${body.prevConsult}` },
+      { type: 'SYSTEM_NOTE', text: `Source: ${body.source}` },
+      { type: 'SYSTEM_NOTE', text: `URL: ${body.pageUrl}` },
+    ],
   };
 
   try {
