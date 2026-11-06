@@ -4,11 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { SectionHeading } from "./Shared";
 
 const videos = [
-  { src: "https://res.cloudinary.com/dthj7fakc/video/upload/v1781762970/video1_kaazse.mp4" },
-  // { src: "https://res.cloudinary.com/dthj7fakc/video/upload/v1781762972/video2_qtujea.mp4" },
-  { src: "https://res.cloudinary.com/dthj7fakc/video/upload/v1781762972/video3_rpzmq3.mp4" },
-  // { src: "https://ik.imagekit.io/tpucbav8z/marinias1_squished.mp4" },
-  // { src: "https://ik.imagekit.io/tpucbav8z/output%201hernia_squished.mp4" },
+  { src: "/reel-1.mp4" },
+  { src: "/reel-2.mp4" },
 ];
 
 export default function VideoTestimonialsSection() {
@@ -25,11 +22,6 @@ export default function VideoTestimonialsSection() {
     });
   };
 
-  const handleActivePlay = (video: HTMLVideoElement) => {
-    setIsAutoPaused(true);
-    pauseAllVideos(video);
-  };
-
   const changeActive = (getNextIndex: (current: number) => number) => {
     pauseAllVideos();
     setActive(getNextIndex);
@@ -38,14 +30,16 @@ export default function VideoTestimonialsSection() {
   const prev = () => changeActive((i) => (i - 1 + n) % n);
   const next = () => changeActive((i) => (i + 1) % n);
 
+  // Auto-change every 5s, but stop for good once the viewer interacts (unmute / click / play)
   useEffect(() => {
     if (isAutoPaused) return;
     const t = setInterval(() => {
-      [prevVideoRef.current, activeVideoRef.current, nextVideoRef.current].forEach((video) => video?.pause());
+      pauseAllVideos();
       setActive((i) => (i + 1) % n);
-    }, 10000);
+    }, 5000);
     return () => clearInterval(t);
   }, [isAutoPaused, n]);
+
   const prevIdx = (active - 1 + n) % n;
   const nextIdx = (active + 1) % n;
 
@@ -78,7 +72,7 @@ export default function VideoTestimonialsSection() {
             className="hidden min-[768px]:block flex-none cursor-pointer origin-right scale-[0.80] opacity-35 transition-all duration-500 hover:opacity-50"
             onClick={prev}
           >
-            <div className="w-[210px] aspect-[9/16] rounded-[18px] bg-[#163030] overflow-hidden">
+            <div className="w-[240px] aspect-[9/16] rounded-[18px] bg-[#163030] overflow-hidden">
               <video
                 ref={prevVideoRef}
                 src={videos[prevIdx].src}
@@ -92,15 +86,20 @@ export default function VideoTestimonialsSection() {
 
           {/* ── Center / Active video ── */}
           <div className="flex-none relative z-10">
-            <div className="w-[300px] max-[640px]:w-[80vw] aspect-[9/16] rounded-[24px] overflow-hidden">
+            <div className="w-[340px] max-[640px]:w-[78vw] aspect-[9/16] rounded-[24px] overflow-hidden">
               <video
                 ref={activeVideoRef}
                 key={active}
                 src={videos[active].src}
                 controls
+                autoPlay
+                muted
                 playsInline
                 preload="metadata"
-                onPlay={(event) => handleActivePlay(event.currentTarget)}
+                loop
+                onPointerDown={() => setIsAutoPaused(true)}
+                onVolumeChange={(event) => { if (!event.currentTarget.muted) setIsAutoPaused(true); }}
+                onPlay={(event) => pauseAllVideos(event.currentTarget)}
                 className="w-full h-full object-cover block"
               />
             </div>
@@ -111,7 +110,7 @@ export default function VideoTestimonialsSection() {
             className="hidden min-[768px]:block flex-none cursor-pointer origin-left scale-[0.80] opacity-35 transition-all duration-500 hover:opacity-50"
             onClick={next}
           >
-            <div className="w-[210px] aspect-[9/16] rounded-[18px] overflow-hidden">
+            <div className="w-[240px] aspect-[9/16] rounded-[18px] overflow-hidden">
               <video
                 ref={nextVideoRef}
                 src={videos[nextIdx].src}

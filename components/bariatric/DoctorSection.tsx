@@ -1,23 +1,23 @@
-const DOC_IMG = "https://res.cloudinary.com/dthj7fakc/image/upload/v1781681953/dr-preethi-mrinalini_wmgdmk.webp";
+const DOC_IMG = "/doctor-1.png";
 
 const stats = [["300+", "Surgeries"], ["95%", "Success Rate"], ["12+", "Years Exp."]];
 
 export default function DoctorSection() {
   return (
     <section style={{ background: "radial-gradient(ellipse at 20% 50%, #e3f9f9 0%, #fff 55%)" }}>
-      <div className="w-[min(1080px,92%)] mx-auto">
-        <div className="grid grid-cols-[0.85fr_1.15fr] max-[640px]:grid-cols-1 gap-12 max-[1024px]:gap-8 items-center">
+      <div className="w-[min(1280px,94%)] mx-auto">
+        <div className="grid grid-cols-2 max-[640px]:grid-cols-1 gap-10 max-[1024px]:gap-8 items-stretch">
 
           {/* Photo — desktop */}
-          <div className="max-[640px]:hidden">
-            <div className="aspect-[4/5] rounded-3xl overflow-hidden ring-1 ring-[rgba(66,200,200,0.30)]">
+          <div className="max-[640px]:hidden relative min-h-[520px]">
+            <div className="absolute inset-0 rounded-3xl overflow-hidden ring-1 ring-[rgba(66,200,200,0.30)]">
               <img src={DOC_IMG} alt="Dr. Preethi Mrinalini" className="w-full h-full object-cover object-top block" />
             </div>
           </div>
 
-          <div>
+          <div className="flex flex-col justify-center py-4">
             {/* Badge */}
-            <span className="inline-block text-[.7rem] font-bold tracking-[.18em] uppercase text-[#126e6e] px-3 py-[6px] rounded-full bg-[rgba(66,200,200,.12)] border border-[rgba(66,200,200,.3)] mb-5">
+            <span className="self-start inline-block text-[.7rem] font-bold tracking-[.18em] uppercase text-[#126e6e] px-3 py-[6px] rounded-full bg-[rgba(66,200,200,.12)] border border-[rgba(66,200,200,.3)] mb-5">
               Your Surgeon
             </span>
 
