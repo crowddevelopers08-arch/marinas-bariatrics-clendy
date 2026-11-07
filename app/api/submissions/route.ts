@@ -148,6 +148,49 @@ async function pushToGAS(body: SubmissionBody, timestamp: string, telecrmStatus:
   return res.text();
 }
 
+const BC_FORM_NAME   = 'Bariatric leads';
+const BC_SOURCE_NAME = 'Bariatric-BC';
+
+// Sends the booking form lead to the "BC-leads" Google Apps Script (GOOGLE_APPS_SCRIPT_URL).
+// Separate from pushToGAS (NEXT_PUBLIC_GAS_URL) so the old sheet script is untouched.
+async function pushToBcLeads(body: SubmissionBody, timestamp: string, telecrmStatus: string) {
+  const url = process.env.GOOGLE_APPS_SCRIPT_URL;
+  if (!url) return null;
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({
+      timestamp,
+      formName:        BC_FORM_NAME,
+      source:          BC_SOURCE_NAME,
+      firstName:       body.firstName,
+      lastName:        body.lastName,
+      email:           body.email,
+      phone:           body.phone,
+      location:        body.location,
+      appointmentDate: body.appointmentDate,
+      appointmentTime: body.appointmentTime,
+      symptomType:     body.symptomType,
+      hadSurgery:      body.hadSurgery,
+      prevConsult:     body.prevConsult,
+      pageUrl:         body.pageUrl,
+      telecrm:         telecrmStatus,
+    }),
+  });
+
+  if (!res.ok) throw new Error(`BC-leads script failed with ${res.status}`);
+  const text = await res.text();
+  try {
+    const parsed = JSON.parse(text) as { success?: boolean; error?: string };
+    if (parsed.success === false) throw new Error(parsed.error || 'BC-leads script returned success=false');
+  } catch (e) {
+    if (e instanceof SyntaxError) return text;
+    throw e;
+  }
+  return text;
+}
+
 function normalizePhoneForTeleCRM(phone: string) {
   const digits = phone.replace(/\D/g, '');
   if (digits.length === 10) return `91${digits}`;
@@ -307,6 +350,9 @@ export async function POST(req: NextRequest) {
 
     try { await pushToGAS(body, timestamp, telecrmStatus); }
     catch (gasErr) { console.warn('GAS sync skipped:', (gasErr as Error).message); }
+
+    try { await pushToBcLeads(body, timestamp, telecrmStatus); }
+    catch (bcErr) { console.warn('BC-leads sync skipped:', (bcErr as Error).message); }
 
     return NextResponse.json({ success: true, telecrm: telecrmResult });
   } catch (err) {
