@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { SectionHeading } from "./Shared";
 
 const videos = [
-  { src: "/reel-1.mp4" },
-  { src: "/reel-2.mp4" },
+  { src: "https://res.cloudinary.com/dxntva1vn/video/upload/v1794027096/reel-1_eoa55z.mp4" },
+  { src: "https://res.cloudinary.com/dxntva1vn/video/upload/v1794027095/reel-2_zqugxr.mp4" },
 ];
 
 export default function VideoTestimonialsSection() {

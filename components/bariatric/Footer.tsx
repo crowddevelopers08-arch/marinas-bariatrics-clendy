@@ -7,7 +7,7 @@ export default function Footer() {
         <div>
                 <div className="flex justify-start mb-1 items-center max-[768px]:justify-center">
                   <Image
-                    src="/Marina-logo.png"
+                    src="https://res.cloudinary.com/dxntva1vn/image/upload/v1794027007/Marina-logo_tjcywr.png"
                     alt="Marina's Clinic"
                     width={300}
                     height={200}

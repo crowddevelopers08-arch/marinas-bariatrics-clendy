@@ -2,15 +2,15 @@ import Image from "next/image";
 
 const transformations = [
   {
-    src: "/before1.png",
+    src: "https://res.cloudinary.com/dxntva1vn/image/upload/v1794027005/bf-1_zuzcmb.png",
     alt: "Male bariatric patient before and after bariatric treatment",
   },
   {
-    src: "/before2.png",
+    src: "https://res.cloudinary.com/dxntva1vn/image/upload/v1794027006/bf-2_skgfpd.png",
     alt: "Female bariatric patient before and after bariatric treatment",
   },
   {
-    src: "/before3.png",
+    src: "https://res.cloudinary.com/dxntva1vn/image/upload/v1794027007/bf-4_ijrzqd.png",
     alt: "Female bariatric patient before and after bariatric treatment",
   },
 ] as const;

@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { BookButton } from "./Shared";
 
 const BG_IMAGES = [
-  "/image-1.jpg",
-  "/image-3.jpg",
-  "/image-2.jpg",
+  "https://res.cloudinary.com/dxntva1vn/image/upload/v1794027153/image-1_altmfq.jpg",
+  "https://res.cloudinary.com/dxntva1vn/image/upload/v1794027154/image-3_wqnpv2.jpg",
+  "https://res.cloudinary.com/dxntva1vn/image/upload/v1794027265/images2_ulpblv.jpg",
 
 ];
 
@@ -88,7 +88,7 @@ export default function HeroSection() {
             <div className="col-start-2 row-start-1 row-span-2 p-6 flex items-center max-[768px]:px-5 max-[768px]:py-4">
               <div className="relative w-full rounded-2xl overflow-hidden aspect-video shadow-[0_8px_40px_rgba(18,110,110,0.13)] ring-1 ring-[rgba(66,200,200,0.18)]">
                 <video
-                  src="/marinias1_squished.mp4"
+                  src="https://res.cloudinary.com/dxntva1vn/video/upload/v1794027019/video-1_clrf7v.mp4"
                   controls
                   playsInline
                   preload="metadata"

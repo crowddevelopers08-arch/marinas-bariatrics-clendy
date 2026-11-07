@@ -7,7 +7,7 @@ export default function Header() {
       <div className="w-[min(1080px,92%)] mx-auto flex items-center justify-between max-[640px]:justify-center gap-4 max-[420px]:gap-3 flex-wrap">
         <div className="flex items-center">
           <Image
-            src="/Marina-logo.png"
+            src="https://res.cloudinary.com/dxntva1vn/image/upload/v1794027007/Marina-logo_tjcywr.png"
             alt="Marina's Clinic"
             width={300}
             height={200}

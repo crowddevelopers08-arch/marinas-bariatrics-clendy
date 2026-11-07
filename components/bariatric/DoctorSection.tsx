@@ -1,4 +1,4 @@
-const DOC_IMG = "/doctor-1.png";
+const DOC_IMG = "https://res.cloudinary.com/dxntva1vn/image/upload/v1794027007/doctor-1_c8ms3x.png";
 
 const stats = [["300+", "Surgeries"], ["95%", "Success Rate"], ["12+", "Years Exp."]];
 
